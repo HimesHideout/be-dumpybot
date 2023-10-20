@@ -1,10 +1,9 @@
-exports.handleServerError = (err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ msg: "Internal server error" });
-};
-
-exports.handle404s = (error, request, response, next) => {
+exports.handleErrors = (error, request, response, next) => {
     if (error.status === 404) {
         response.status(error.status).send({ msg: error.msg });
+    } else if (error.status === 401) {
+        response.status(401).send({ msg: "Unauthorized request" });
+    } else {
+        res.status(500).send({ msg: "Internal server error" });
     }
 };
