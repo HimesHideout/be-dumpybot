@@ -1,0 +1,11 @@
+# Node
+node_modules
+
+# .env support
+.env*
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
