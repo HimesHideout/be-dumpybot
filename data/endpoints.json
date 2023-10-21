@@ -16,5 +16,14 @@
         }
       }
     }
+  },
+  "GET /api/secret": {
+    "description": "serves up a secret message only accessible by an authorized user",
+    "queries": [],
+    "bodyFormat": {"authorization":  "BEARER TOKEN"},
+    "exampleResponse": {
+      "secret": "nope",
+      "message": "try the command ;)"
+    }
   }
 }
