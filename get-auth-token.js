@@ -9,6 +9,6 @@ const options = {
 
 request(options, function (error, response, body) {
     if (error) throw new Error(error);
-
-    console.log(body);
+    const authObj = JSON.parse(body)
+    console.log(`${authObj.token_type} ${authObj.access_token}`)
 });
