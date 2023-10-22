@@ -21,6 +21,7 @@ app.use(express.json());
 
 // Endpoints
 app.get("/api", getEndpoints);
+// noinspection JSCheckFunctionSignatures
 app.get("/api/secret", jwtCheck, getSecret);
 
 // Error Handling
