@@ -4,6 +4,6 @@ exports.handleErrors = (error, request, response, next) => {
     } else if (error.status === 401) {
         response.status(401).send({ msg: "Unauthorized request" });
     } else {
-        res.status(500).send({ msg: "Internal server error" });
+        response.status(500).send({ msg: "Internal server error" });
     }
 };
