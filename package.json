@@ -7,12 +7,15 @@
     "test": "jest",
     "dev": "nodemon listen.js",
     "auth": "node get-auth-token.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "apply-schemas": "NODE_ENV=development node database/apply-schemas.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.435.0",
+    "@aws-sdk/lib-dynamodb": "^3.435.0",
     "axios": "^1.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
