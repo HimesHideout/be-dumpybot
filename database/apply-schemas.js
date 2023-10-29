@@ -5,7 +5,7 @@ const path = require('node:path');
 
 const ENV = process.env.NODE_ENV
 const CLI_ARGS = process.argv.slice(2)
-const pathToCorrectFile = `${__dirname}/../.env.development`;
+const pathToCorrectFile = `${__dirname}/../.env.${ENV}`;
 require("dotenv").config({ path: pathToCorrectFile });
 console.log(process.env.AWS_REGION)
 const DB = new DynamoDB()
