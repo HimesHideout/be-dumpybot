@@ -17,3 +17,18 @@ exports.selectPlayers = () => {
             return data.Items
         })
 }
+
+exports.selectPlayerById = (playerId) => {
+    const getParams = {
+        TableName: "test-players",
+        Key: {
+            userId: playerId
+        }
+    }
+
+    return ddbDocClientFull
+        .get(getParams)
+        .then((data) => {
+            return data.Item
+        })
+}

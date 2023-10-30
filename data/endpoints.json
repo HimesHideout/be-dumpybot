@@ -39,5 +39,18 @@
         }
       ]
     }
+  },
+  "GET /api/players/:userId": {
+    "description": "serves up a selected player",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "player":
+        {
+          "userId": "1",
+          "balance": 0,
+          "inventory": {}
+        }
+    }
   }
 }
