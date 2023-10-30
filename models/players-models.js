@@ -37,6 +37,33 @@ exports.selectPlayerById = (playerId) => {
         })
 }
 
+exports.insertPlayer = (playerId) => {
+    if (playerId === undefined || playerId === ""){
+        return Promise.reject({ status: 400, msg: "userId is required" });
+    }
+    const putParams = {
+        TableName: "test-players",
+        Item: {
+            userId: playerId,
+            balance: 0,
+            inventory: []
+        }
+    }
+
+    return ddbDocClientFull
+        .put(putParams)
+        .then((data) => {
+            if (data.$metadata.httpStatusCode === 200) {
+                return {
+                    "status": "success",
+                    "player": playerId
+                }
+            } else {
+                return Promise.reject({status: data.$metadata.httpStatusCode, msg: "Error creating player."})
+            }
+        })
+}
+
 exports.updatePlayerById = async (playerId, patch) => {
 
     const data = await ddbDocClientFull.get({TableName: "test-players", Key: {userId: playerId}})

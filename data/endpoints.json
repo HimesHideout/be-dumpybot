@@ -53,6 +53,17 @@
         }
     }
   },
+  "PUT /api/players": {
+    "description": "inserts a player into the database",
+    "queries": [],
+    "bodyFormat": {
+      "userId": "STRING"
+    },
+    "exampleResponse": {
+      "status": "success",
+      "player": "1"
+    }
+  },
   "PATCH /api/players/:userId": {
     "description": "edits the value of a specific player and returns the edited item",
     "queries": [],

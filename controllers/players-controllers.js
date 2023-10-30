@@ -1,4 +1,4 @@
-const {selectPlayers, selectPlayerById, updatePlayerById} = require("../models/players-models");
+const {selectPlayers, selectPlayerById, updatePlayerById, insertPlayer} = require("../models/players-models");
 
 exports.getPlayers = (request, response, next) => {
     selectPlayers().then((players) => {
@@ -15,6 +15,15 @@ exports.getPlayerById = (request, response, next) => {
     }
     selectPlayerById(userId).then((player) => {
         response.status(200).send({player})
+    }).catch((error) => {
+        next(error)
+    })
+}
+
+exports.insertPlayer = (request, response, next) => {
+    const playerId = request.body.userId
+    insertPlayer(playerId).then((status) => {
+        response.status(200).send(status)
     }).catch((error) => {
         next(error)
     })
