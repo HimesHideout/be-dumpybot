@@ -1,12 +1,18 @@
 const request = require("supertest");
 const app = require("../app");
+const getAuthKey = require("../get-auth-token");
 
 const ENV = process.env.NODE_ENV;
 const pathToCorrectFile = `${__dirname}/../.env.${ENV}`;
 require("dotenv").config({path: pathToCorrectFile});
 
+let authToken = ''
+beforeAll(async () => {
+    authToken = await getAuthKey()
+})
+
 describe("/api", () => {
-    test("GET 200   | Returns 200 and an object with correct endpoint values within", () => {
+    test("GET 200   | Returns 200 and an object with correct endpoint values within",  () => {
         return request(app)
             .get("/api")
             .expect(200)
@@ -102,4 +108,62 @@ describe('/api/players/:userId', () => {
                 expect(body.msg).toBe("Player not found")
             })
     });
+    test('PATCH 200 | Returns 200 and an object with the correct values on it', () => {
+        let beforePatch;
+        let afterPatch
+        return request(app)
+            .get("/api/players/168129756255092737")
+            .expect(200)
+            .then(({body}) => {
+                beforePatch = body.player.balance
+                return request(app)
+                    .patch("/api/players/168129756255092737")
+                    .set('Authorization', authToken)
+                    .send({incr_balance: 1})
+                    .expect(200)
+                    .then(({body}) => {
+                        const player = body.player
+                        afterPatch = player.balance
+                        expect(afterPatch === beforePatch + 1).toBe(true)
+                    })
+            })
+    });
+
+    test('PATCH 400 | Returns 400 when attempting to reduce balance to under 0, and provides a message',  () => {
+        return request(app)
+            .patch("/api/players/292670434141274112")
+            .set('Authorization', authToken)
+            .send({incr_balance: -100000000000})
+            .expect(400)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("insufficient balance for action")
+            })
+
+    });
+
+    test('PATCH 401 | Returns 401 when attempting an unauthenticated request', () => {
+        return request(app)
+            .patch("/api/players/292670434141274112")
+            .send({incr_balance: -100000000000})
+            .expect(401)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("Unauthorized request")
+            })
+    });
+
+    test('PATCH 404 | Returns 404 when requesting a player that doesn\'t exist', () => {
+        return request(app)
+            .patch("/api/players/234280127045873")
+            .set('Authorization', authToken)
+            .send({incr_balance: 1})
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("Player not found")
+            })
+    });
+
+
 });
