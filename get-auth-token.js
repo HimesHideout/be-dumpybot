@@ -1,14 +1,24 @@
-const request = require("request");
+const axios = require("axios");
 
-const options = {
-    method: 'POST',
-    url: 'https://dev-btw4il1186pitwdx.us.auth0.com/oauth/token',
-    headers: {'content-type': 'application/json'},
-    body: '{"client_id":"zAgF9v5z99qdpAIeRzdlX7YSMOkyCiSE","client_secret":"R22bi2RgcH80bZwdY1WMipfcGlxFbYu8QOZnpNwq4kyiI0iIbIQ9ftkNKI-tkBAQ","audience":"http://localhost:9090","grant_type":"client_credentials"}'
-};
+const getAuthKey = async () => {
 
-request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-    const authObj = JSON.parse(body)
-    console.log(`${authObj.token_type} ${authObj.access_token}`)
-});
+    const options = {
+        url: 'https://dev-btw4il1186pitwdx.us.auth0.com/oauth/token',
+        body: {
+            "audience": "http://localhost:9090",
+            "client_id": "zAgF9v5z99qdpAIeRzdlX7YSMOkyCiSE",
+            "client_secret": "R22bi2RgcH80bZwdY1WMipfcGlxFbYu8QOZnpNwq4kyiI0iIbIQ9ftkNKI-tkBAQ",
+            "grant_type": "client_credentials"
+        }
+    };
+
+    const authObj = await axios.post(options.url, options.body)
+    const data = authObj.data
+    const output = `${data.token_type} ${data.access_token}`
+    console.log(output)
+    return output
+}
+
+getAuthKey()
+
+module.exports = getAuthKey
