@@ -14,7 +14,6 @@ exports.selectPlayers = () => {
     return ddbDocClientFull
         .scan(scanParams)
         .then((data) => {
-            // console.log(data.Items)
             return data.Items
         })
 }
