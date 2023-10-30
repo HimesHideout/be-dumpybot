@@ -52,5 +52,20 @@
           "inventory": {}
         }
     }
+  },
+  "PATCH /api/players/:userId": {
+    "description": "edits the value of a specific player and returns the edited item",
+    "queries": [],
+    "bodyFormat": {
+      "incr_balance": 2
+    },
+    "exampleResponse": {
+      "player":
+      {
+        "userId": "1",
+        "balance": 2,
+        "inventory": {}
+      }
+    }
   }
 }
