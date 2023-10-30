@@ -4,7 +4,10 @@ exports.handleErrors = (error, request, response, next) => {
     } else if (error.status === 400) {
         if (error.msg !== undefined){
             response.status(error.status).send({ msg: error.msg });
-        } else {
+        } else if (error.__type && error.__type === "com.amazon.coral.validate#ValidationException") {
+            response.status(error.status).send({ msg: error.attr_msg});
+        }
+        else {
             response.status(400).send({msg: "Invalid endpoint parameter(s) format"})
         }
     } else if (error.status === 401) {
