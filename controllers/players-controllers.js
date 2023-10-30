@@ -9,6 +9,9 @@ exports.getPlayers = (request, response, next) => {
 
 exports.getPlayerById = (request, response, next) => {
     const { userId } = request.params;
+    if (! /^\d+$/.test(userId)) {
+        response.status(400).send({msg: "Invalid userId format"})
+    }
     selectPlayerById(userId).then((player) => {
         response.status(200).send({player})
     }).catch((error) => {
