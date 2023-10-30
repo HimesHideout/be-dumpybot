@@ -29,7 +29,6 @@ exports.selectPlayerById = (playerId) => {
     return ddbDocClientFull
         .get(getParams)
         .then((data) => {
-            console.log(data)
             if (data.Item === undefined){
                 return Promise.reject({ status: 404, msg: "Player not found" });
             } else {
