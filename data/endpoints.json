@@ -25,5 +25,19 @@
       "secret": "nope",
       "message": "try the command ;)"
     }
+  },
+  "GET /api/players": {
+    "description": "serves up all the players of the bot",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "players": [
+        {
+          "userId": "1",
+          "balance": 0,
+          "inventory": {}
+        }
+      ]
+    }
   }
 }
