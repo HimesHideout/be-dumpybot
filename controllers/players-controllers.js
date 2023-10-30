@@ -1,4 +1,5 @@
-const {selectPlayers, selectPlayerById} = require("../models/players-models");
+const {selectPlayers, selectPlayerById, updatePlayerById} = require("../models/players-models");
+
 exports.getPlayers = (request, response, next) => {
     selectPlayers().then((players) => {
         response.status(200).send({ players });
@@ -17,4 +18,13 @@ exports.getPlayerById = (request, response, next) => {
     }).catch((error) => {
         next(error)
     })
+}
+
+exports.patchPlayerById = (request, response, next) => {
+    const {userId} = request.params
+    const patch = request.body
+    const promises = [selectPlayerById(userId), updatePlayerById(userId, patch)]
+    Promise.all(promises).then(resolvedPromises => {
+        response.status(200).send({player: resolvedPromises[1]})
+    }).catch(err => next(err))
 }
