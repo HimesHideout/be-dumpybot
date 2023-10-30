@@ -4,6 +4,7 @@ const { auth } = require('express-oauth2-jwt-bearer');
 
 const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
+const {getPlayers} = require("./controllers/players-controllers");
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.use(express.json());
 app.get("/api", getEndpoints);
 // noinspection JSCheckFunctionSignatures
 app.get("/api/secret", jwtCheck, getSecret);
+
+app.get("/api/players", getPlayers)
 
 // Error Handling
 app.use((req, res) => {
