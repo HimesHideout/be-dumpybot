@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 
-const ENV = "development";
+const ENV = process.env.NODE_ENV;
 const pathToCorrectFile = `${__dirname}/../.env.${ENV}`;
 require("dotenv").config({ path: pathToCorrectFile });
 
@@ -45,18 +45,18 @@ describe("/api", () => {
     });
 });
 
-/*
 describe("/api/players", () => {
     test('GET 200   | Returns 200 and an object with the correct endpoint values in it', () => {
         return request(app)
             .get("/api/players")
             .expect(200)
             .then(({body}) => {
-                body.forEach((business) => {
+                const players = body.players
+                players.forEach((business) => {
                     expect(business).toHaveProperty("userId");
                     expect(business).toHaveProperty("balance");
                     expect(business).toHaveProperty("inventory");
                 });
             })
     });
-})*/
+})
