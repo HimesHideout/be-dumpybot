@@ -22,8 +22,8 @@ exports.getPlayerById = (request, response, next) => {
 
 exports.insertPlayer = (request, response, next) => {
     const playerId = request.body.userId
-    insertPlayer(playerId).then((status) => {
-        response.status(200).send(status)
+    insertPlayer(playerId).then((player) => {
+        response.status(200).send({player})
     }).catch((error) => {
         next(error)
     })
