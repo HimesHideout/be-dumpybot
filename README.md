@@ -4,7 +4,7 @@
 
 ### Creating Tables on AWS
 
-On your AWS account, you will need a few tables set up: `dumpy-prod`, `dumpy-dev` and `dumpy-test` so that you can 
+On your AWS account, you will need a few tables set up: `PRODUCTION`, `DEVELOPMENT` and `TEST` so that you can 
 separate your data. You most importantly need the split between `test` and `dev/prod` so that the testing suite
 may work.
 
@@ -35,6 +35,19 @@ DYNAMO_TABLE_NAME=yourTableName
 ```
 
 These should all reflect the specific account and table you'd like to use in the backend.
+
+Make sure your dynamo table name is correct as well!
+
+For example, your **test .env** might have 
+```dotenv
+DYNAMO_TABLE_NAME=test_dumpy
+```
+and then your **development .env** may have:
+```dotenv
+DYNAMO_TABLE_NAME=development_dumpy
+```
+
+How you name them is up to you, but double check you have the right information in each env file respectively
 
 ## Test Suite
 
