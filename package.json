@@ -5,7 +5,7 @@
   "main": "listen.js",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon listen.js",
+    "dev": "NODE_ENV=development nodemon listen.js",
     "auth": "node get-auth-token.js",
     "prepare": "husky install",
     "apply-schemas": "NODE_ENV=development node database/apply-schemas.js",
