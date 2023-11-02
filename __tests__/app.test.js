@@ -68,19 +68,16 @@ describe("/api/players", () => {
             })
     });
     test('PUT 200   | Returns 200 and an object with the correct endpoint values in it', () => {
-        return request(app)
-            .get("/api/players/69420")
-            .expect(404)
-            .then(({body}) => {
                 return request(app)
                     .put("/api/players")
                     .set('Authorization', authToken)
                     .send({userId: "69420"})
                     .expect(200)
                     .then(({body}) => {
-                        const playerId = body.player
+                        const player = body.player
+                        expect(player.userId).toBe("69420")
                         return request(app)
-                            .get(`/api/players/${playerId}`)
+                            .get(`/api/players/69420`)
                             .expect(200)
                             .then(({body}) => {
                                 const player = body.player
@@ -88,7 +85,6 @@ describe("/api/players", () => {
                                 expect(player).toHaveProperty("balance");
                                 expect(player).toHaveProperty("inventory");
                             })
-                    })
             })
 
     });
