@@ -136,7 +136,6 @@ describe('/api/players/:userId', () => {
             })
     });
     test('PATCH 200 | Returns 200 and an object with the correct values on it', () => {
-        let beforePatch;
         let afterPatch
         return request(app)
             .patch("/api/players/1")
