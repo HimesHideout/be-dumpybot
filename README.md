@@ -2,6 +2,12 @@
 
 ## Setup
 
+### Creating Tables on AWS
+
+On your AWS account, you will need a few tables set up: `dumpy-prod`, `dumpy-dev` and `dumpy-test` so that you can 
+separate your data. You most importantly need the split between `test` and `dev/prod` so that the testing suite
+may work.
+
 ### Installing Packages
 
 For setup, `npm install` all the packages for the project.
@@ -22,13 +28,13 @@ There are **3** .env files you will need: `.env.test`, `.env.development` and `.
 contain the following keys:
 
 ```dotenv
-
 AWS_DEFAULT_REGION=yourRegion
 AWS_ACCESS_KEY_ID=yourId
 AWS_SECRET_ACCESS_KEY=yourSecret
+DYNAMO_TABLE_NAME=yourTableName
 ```
 
-These should all reflect the specific account and table you'd like to use for the backend.
+These should all reflect the specific account and table you'd like to use in the backend.
 
 ## Test Suite
 
