@@ -1,6 +1,6 @@
 // const {ScanCommand} = require("@aws-sdk/lib-dynamodb")
 /*    const command = new ScanCommand({
-        TableName: "test-players",
+        TableName: process.env.DYNAMO_TABLE_NAME,
     });*/
 
 const {ddbDocClientFull} = require("../database/connection");
@@ -8,7 +8,7 @@ const {ddbDocClientFull} = require("../database/connection");
 exports.selectPlayers = () => {
 
     const scanParams = {
-        TableName: "test-players"
+        TableName: process.env.DYNAMO_TABLE_NAME
     }
 
     return ddbDocClientFull
@@ -20,12 +20,11 @@ exports.selectPlayers = () => {
 
 exports.selectPlayerById = (playerId) => {
     const getParams = {
-        TableName: "test-players",
+        TableName: process.env.DYNAMO_TABLE_NAME,
         Key: {
             userId: playerId
         }
     }
-
     return ddbDocClientFull
         .get(getParams)
         .then((data) => {
@@ -42,11 +41,11 @@ exports.insertPlayer = (playerId) => {
         return Promise.reject({ status: 400, msg: "userId is required" });
     }
     const putParams = {
-        TableName: "test-players",
+        TableName: process.env.DYNAMO_TABLE_NAME,
         Item: {
             userId: playerId,
             balance: 0,
-            inventory: []
+            inventory: {}
         }
     }
 
@@ -54,10 +53,15 @@ exports.insertPlayer = (playerId) => {
         .put(putParams)
         .then((data) => {
             if (data.$metadata.httpStatusCode === 200) {
-                return {
-                    "status": "success",
-                    "player": playerId
+                const getParams = {
+                    TableName: process.env.DYNAMO_TABLE_NAME,
+                    Key: {
+                        userId: playerId
+                    }
                 }
+                return ddbDocClientFull
+                    .get(getParams)
+                    .then((data) => data.Item)
             } else {
                 return Promise.reject({status: data.$metadata.httpStatusCode, msg: "Error creating player."})
             }
@@ -66,7 +70,7 @@ exports.insertPlayer = (playerId) => {
 
 exports.updatePlayerById = async (playerId, patch) => {
 
-    const data = await ddbDocClientFull.get({TableName: "test-players", Key: {userId: playerId}})
+    const data = await ddbDocClientFull.get({TableName: process.env.DYNAMO_TABLE_NAME, Key: {userId: playerId}})
     const player = data.Item
 
     if (patch.incr_balance && typeof patch.incr_balance !== "number") return Promise.reject({
@@ -82,7 +86,7 @@ exports.updatePlayerById = async (playerId, patch) => {
         })
 
         const params = {
-            TableName: "test-players",
+            TableName: process.env.DYNAMO_TABLE_NAME,
             Key: {
                 userId: playerId
             },
