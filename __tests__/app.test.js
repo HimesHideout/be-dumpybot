@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 const getAuthKey = require("../get-auth-token");
+const seed = require("../seed");
 
 const ENV = process.env.NODE_ENV;
 const pathToCorrectFile = `${__dirname}/../.env.${ENV}`;
@@ -8,11 +9,12 @@ require("dotenv").config({path: pathToCorrectFile});
 
 let authToken = ''
 beforeAll(async () => {
+    await seed(`data/${process.env.NODE_ENV}-player-data.json`)
     authToken = await getAuthKey()
 })
 
 describe("/api", () => {
-    test("GET 200   | Returns 200 and an object with correct endpoint values within",  () => {
+    test("GET 200   | Returns 200 and an object with correct endpoint values within", () => {
         return request(app)
             .get("/api")
             .expect(200)
@@ -78,14 +80,14 @@ describe("/api/players", () => {
                     .then(({body}) => {
                         const playerId = body.player
                         return request(app)
-                        .get(`/api/players/${playerId}`)
-                        .expect(200)
-                        .then(({body}) => {
-                            const player = body.player
-                            expect(player).toHaveProperty("userId");
-                            expect(player).toHaveProperty("balance");
-                            expect(player).toHaveProperty("inventory");
-                        })
+                            .get(`/api/players/${playerId}`)
+                            .expect(200)
+                            .then(({body}) => {
+                                const player = body.player
+                                expect(player).toHaveProperty("userId");
+                                expect(player).toHaveProperty("balance");
+                                expect(player).toHaveProperty("inventory");
+                            })
                     })
             })
 
@@ -95,7 +97,7 @@ describe("/api/players", () => {
 describe('/api/players/:userId', () => {
     test('GET 200   | Returns 200 and an object with the correct endpoint values on it', () => {
         return request(app)
-            .get("/api/players/168129756255092737")
+            .get("/api/players/1")
             .expect(200)
             .then(({body}) => {
                 const player = body.player
@@ -107,12 +109,12 @@ describe('/api/players/:userId', () => {
     });
     test('GET 200   | Returns 200 and a player object with the correct userId', () => {
         return request(app)
-            .get("/api/players/168129756255092737")
+            .get("/api/players/1")
             .expect(200)
             .then(({body}) => {
                 const player = body.player
                 expect(player).toHaveProperty("userId");
-                expect(player.userId).toBe("168129756255092737")
+                expect(player.userId).toBe("1")
             })
     });
     test('GET 400   | Returns 400 when passed an invalid userId format (contains letters) with appropriate error message', () => {
@@ -126,7 +128,7 @@ describe('/api/players/:userId', () => {
     });
     test('GET 404   | Returns 404 when passed a valid but nonexistent userId', () => {
         return request(app)
-            .get("/api/players/18364892302783782")
+            .get("/api/players/4")
             .expect(404)
             .then(({body}) => {
                 expect(body).toHaveProperty("msg");
@@ -137,26 +139,20 @@ describe('/api/players/:userId', () => {
         let beforePatch;
         let afterPatch
         return request(app)
-            .get("/api/players/168129756255092737")
+            .patch("/api/players/1")
+            .set('Authorization', authToken)
+            .send({incr_balance: 1})
             .expect(200)
             .then(({body}) => {
-                beforePatch = body.player.balance
-                return request(app)
-                    .patch("/api/players/168129756255092737")
-                    .set('Authorization', authToken)
-                    .send({incr_balance: 1})
-                    .expect(200)
-                    .then(({body}) => {
-                        const player = body.player
-                        afterPatch = player.balance
-                        expect(afterPatch === beforePatch + 1).toBe(true)
-                    })
+                const player = body.player
+                afterPatch = player.balance
+                expect(afterPatch).toBe(1)
             })
     });
 
-    test('PATCH 400 | Returns 400 when attempting to reduce balance to under 0, and provides a message',  () => {
+    test('PATCH 400 | Returns 400 when attempting to reduce balance to under 0, and provides a message', () => {
         return request(app)
-            .patch("/api/players/292670434141274112")
+            .patch("/api/players/2")
             .set('Authorization', authToken)
             .send({incr_balance: -100000000000})
             .expect(400)
@@ -169,8 +165,8 @@ describe('/api/players/:userId', () => {
 
     test('PATCH 401 | Returns 401 when attempting an unauthenticated request', () => {
         return request(app)
-            .patch("/api/players/292670434141274112")
-            .send({incr_balance: -100000000000})
+            .patch("/api/players/1")
+            .send({incr_balance: 1})
             .expect(401)
             .then(({body}) => {
                 expect(body).toHaveProperty("msg");
@@ -180,7 +176,7 @@ describe('/api/players/:userId', () => {
 
     test('PATCH 404 | Returns 404 when requesting a player that doesn\'t exist', () => {
         return request(app)
-            .patch("/api/players/234280127045873")
+            .patch("/api/players/4")
             .set('Authorization', authToken)
             .send({incr_balance: 1})
             .expect(404)
@@ -189,6 +185,5 @@ describe('/api/players/:userId', () => {
                 expect(body.msg).toBe("Player not found")
             })
     });
-
 
 });
