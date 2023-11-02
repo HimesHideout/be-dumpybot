@@ -8,7 +8,8 @@
     "dev": "nodemon listen.js",
     "auth": "node get-auth-token.js",
     "prepare": "husky install",
-    "apply-schemas": "NODE_ENV=development node database/apply-schemas.js"
+    "apply-schemas": "NODE_ENV=development node database/apply-schemas.js",
+    "seed-dev": "NODE_ENV=development node seed.js"
   },
   "keywords": [],
   "author": "",
