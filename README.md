@@ -28,10 +28,16 @@ There are **3** .env files you will need: `.env.test`, `.env.development` and `.
 contain the following keys:
 
 ```dotenv
+# AWS
 AWS_DEFAULT_REGION=yourRegion
 AWS_ACCESS_KEY_ID=yourId
 AWS_SECRET_ACCESS_KEY=yourSecret
 DYNAMO_TABLE_NAME=yourTableName
+#AUTH0
+AUTH_URL=https://dev-yourCode.us.auth0.com/oauth/token
+AUTH_AUDIENCE=http://your-audience.com
+AUTH_CLIENT_ID=yourAuthClient
+AUTH_CLIENT_SECRET=yourAuthSecret
 ```
 
 These should all reflect the specific account and table you'd like to use in the backend.
