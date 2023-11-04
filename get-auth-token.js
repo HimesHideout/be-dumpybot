@@ -1,13 +1,18 @@
 const axios = require("axios");
 
+const ENV = process.env.NODE_ENV || "development";
+const pathToCorrectFile = `${__dirname}/.env.${ENV}`;
+require("dotenv").config({ path: pathToCorrectFile });
+
+
 const getAuthKey = async () => {
 
     const options = {
-        url: 'https://dev-btw4il1186pitwdx.us.auth0.com/oauth/token',
+        url: process.env.AUTH_URL,
         body: {
-            "audience": "http://localhost:9090",
-            "client_id": "zAgF9v5z99qdpAIeRzdlX7YSMOkyCiSE",
-            "client_secret": "R22bi2RgcH80bZwdY1WMipfcGlxFbYu8QOZnpNwq4kyiI0iIbIQ9ftkNKI-tkBAQ",
+            "audience": process.env.AUTH_AUDIENCE,
+            "client_id": process.env.AUTH_CLIENT_ID,
+            "client_secret": process.env.AUTH_CLIENT_SECRET,
             "grant_type": "client_credentials"
         }
     };
@@ -19,6 +24,6 @@ const getAuthKey = async () => {
     return output
 }
 
-getAuthKey()
+getAuthKey().then(null)
 
 module.exports = getAuthKey
