@@ -1,5 +1,17 @@
 # Backend - DumpyBot
 
+## Endpoints 
+
+Here are a list of the available endpoints on the server: 
+
+| REST  |       Endpoint        | Description                       | Body Format                | Queries |
+|-------|:---------------------:|-----------------------------------|----------------------------|---------|
+| GET   |     `api/players`     | Gets all available players        |                            |         |
+| PUT   |                       | Adds a new player                 | `{ userId: id }`           |         |
+| GET   | `api/players/:userId` | Gets a player by their discord ID |                            |         |
+| PATCH |                       | Updates a player property         | `{ incr_balance: +/-INT }` |         |
+
+
 ## Setup
 
 ### Creating Tables on AWS
