@@ -27,10 +27,10 @@ app.get("/api/secret", jwtCheck, getSecret);
 
 app.get("/api/players", getPlayers)
 
-app.get("/api/players/:userId", getPlayerById)
-
 // noinspection JSCheckFunctionSignatures
 app.put("/api/players", jwtCheck, insertPlayer)
+
+app.get("/api/players/:userId", getPlayerById)
 
 // noinspection JSCheckFunctionSignatures
 app.patch("/api/players/:userId", jwtCheck , patchPlayerById)
