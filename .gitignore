@@ -7,6 +7,9 @@ node_modules
 # .env support
 .env*
 
+# Auth0 Private information
+jwt-info.json
+
 # IntelliJ project files
 .idea
 *.iml

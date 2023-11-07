@@ -1,24 +1,26 @@
 const express = require("express");
 const cors = require('cors');
 const { auth } = require('express-oauth2-jwt-bearer');
+const helmet = require("helmet")
 
 const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
 const {getPlayers, getPlayerById, patchPlayerById, insertPlayer} = require("./controllers/players-controllers");
+const fs = require("fs");
 
 const app = express();
 
-const jwtCheck = auth({
-    audience: 'http://localhost:9090',
-    issuerBaseURL: 'https://dev-btw4il1186pitwdx.us.auth0.com/',
-    tokenSigningAlg: 'RS256'
-});
+const rawJwtRead = fs.readFileSync(`${__dirname}/data/jwt-info.json`, "utf-8")
+const jwtData = JSON.parse(rawJwtRead)
+
+const jwtCheck = auth(jwtData);
 
 // enforce on all endpoints
 // app.use(jwtCheck);
 
 app.use(cors());
 app.use(express.json());
+app.use(helmet())
 
 // Endpoints
 app.get("/api", getEndpoints);
