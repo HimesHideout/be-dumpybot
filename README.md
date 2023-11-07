@@ -65,7 +65,21 @@ and then your **development .env** may have:
 DYNAMO_TABLE_NAME=development_dumpy
 ```
 
-How you name them is up to you, but double check you have the right information in each env file respectively
+How you name them is up to you, but double check you have the right information in each env file respectively.
+
+### Adding`jwt-info.json`
+
+In order for the app to work properly, you also need a file in the `be-dumpybot/data` folder called `jwt-info.json`.
+
+This file should contain the following JSON:
+
+```json
+{
+  "audience": "yourAudienceUrl",
+  "issuerBaseURL": "https://dev-yourCode.us.auth0.com/oauth/token",
+  "tokenSigningAlg": "yourSigningAlgorithm"
+}
+```
 
 ## Test Suite
 
