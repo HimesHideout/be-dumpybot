@@ -20,7 +20,9 @@
   "GET /api/secret": {
     "description": "serves up a secret message only accessible by an authorized user",
     "queries": [],
-    "bodyFormat": {"authorization":  "BEARER TOKEN"},
+    "bodyFormat": {
+      "authorization": "BEARER TOKEN"
+    },
     "exampleResponse": {
       "secret": "nope",
       "message": "try the command ;)"
@@ -45,12 +47,11 @@
     "queries": [],
     "bodyFormat": {},
     "exampleResponse": {
-      "player":
-        {
-          "userId": "1",
-          "balance": 0,
-          "inventory": {}
-        }
+      "player": {
+        "userId": "1",
+        "balance": 0,
+        "inventory": {}
+      }
     }
   },
   "PUT /api/players": {
@@ -71,12 +72,17 @@
       "incr_balance": 2
     },
     "exampleResponse": {
-      "player":
-      {
+      "player": {
         "userId": "1",
         "balance": 2,
         "inventory": {}
       }
     }
+  },
+  "DELETE /api/players/:userId": {
+    "description": "deletes a selected player",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {}
   }
 }
