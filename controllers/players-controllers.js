@@ -1,4 +1,4 @@
-const {selectPlayers, selectPlayerById, updatePlayerById, insertPlayer} = require("../models/players-models");
+const {selectPlayers, selectPlayerById, updatePlayerById, insertPlayer, removePlayerById} = require("../models/players-models");
 
 exports.getPlayers = (request, response, next) => {
     selectPlayers().then((players) => {
@@ -36,4 +36,12 @@ exports.patchPlayerById = (request, response, next) => {
     Promise.all(promises).then(resolvedPromises => {
         response.status(200).send({player: resolvedPromises[1]})
     }).catch(err => next(err))
+}
+
+exports.deletePlayerById = (request, response, next) => {
+    const {userId} = request.params
+    const promises = [selectPlayerById(userId), removePlayerById(userId)]
+    Promise.all(promises).then((resolvedPromises) => {
+        response.status(204).send()
+    }).catch((error) => next(error))
 }

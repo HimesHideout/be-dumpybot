@@ -1,8 +1,3 @@
-// const {ScanCommand} = require("@aws-sdk/lib-dynamodb")
-/*    const command = new ScanCommand({
-        TableName: process.env.DYNAMO_TABLE_NAME,
-    });*/
-
 const {ddbDocClientFull} = require("../database/connection");
 
 exports.selectPlayers = () => {
@@ -111,4 +106,22 @@ exports.updatePlayerById = async (playerId, patch) => {
             msg: "no valid patch values"
         })
     }
+}
+
+exports.removePlayerById = (playerId) => {
+    // if (playerId === undefined || playerId === ""){
+    //     return Promise.reject({ status: 400, msg: "userId is required" });
+    // }
+    const deleteParams = {
+        TableName: process.env.DYNAMO_TABLE_NAME,
+        Key: {
+            userId: playerId
+        }
+    }
+
+    return ddbDocClientFull
+        .delete(deleteParams)
+        .then((data) => {
+            return data
+        })
 }
