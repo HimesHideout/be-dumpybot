@@ -181,4 +181,23 @@ describe('/api/players/:userId', () => {
             })
     });
 
+    test('DELETE 204    | Returns 204 when successfully deleting a preexisting player ', () => {
+        return request(app)
+            .delete("/api/players/1")
+            .set("Authorization", authToken)
+            .expect(204)
+            .then(() => {
+                return request(app)
+                    .get("/api/players/1")
+                    .expect(404)
+            })
+    });
+
+    test('DELETE 404    | Returns 404 when deleting a player that doesnt exist', () => {
+        return request(app)
+            .delete("/api/players/4")
+            .set("Authorization", authToken)
+            .expect(404)
+    });
+
 });
