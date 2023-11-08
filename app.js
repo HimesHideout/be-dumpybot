@@ -5,7 +5,7 @@ const helmet = require("helmet")
 
 const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
-const {getPlayers, getPlayerById, patchPlayerById, insertPlayer} = require("./controllers/players-controllers");
+const {getPlayers, getPlayerById, patchPlayerById, insertPlayer, deletePlayerById} = require("./controllers/players-controllers");
 const fs = require("fs");
 
 const app = express();
@@ -36,6 +36,8 @@ app.get("/api/players/:userId", getPlayerById)
 
 // noinspection JSCheckFunctionSignatures
 app.patch("/api/players/:userId", jwtCheck , patchPlayerById)
+
+app.delete("/api/players/:userId", jwtCheck, deletePlayerById)
 
 // Error Handling
 app.use((req, res) => {
