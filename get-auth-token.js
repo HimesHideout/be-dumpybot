@@ -4,7 +4,6 @@ const ENV = process.env.NODE_ENV || "development";
 const pathToCorrectFile = `${__dirname}/.env.${ENV}`;
 require("dotenv").config({ path: pathToCorrectFile });
 
-
 const getAuthKey = async () => {
 
     const options = {
@@ -16,7 +15,6 @@ const getAuthKey = async () => {
             "grant_type": "client_credentials"
         }
     };
-
     const authObj = await axios.post(options.url, options.body)
     const data = authObj.data
     const output = `${data.token_type} ${data.access_token}`

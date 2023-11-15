@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 const getAuthKey = require("../get-auth-token");
+const applySchemas = require("../database/apply-schemas");
 const seed = require("../seed");
 
 const ENV = process.env.NODE_ENV;
@@ -9,7 +10,9 @@ require("dotenv").config({path: pathToCorrectFile});
 
 let authToken = ''
 beforeAll(async () => {
-    await seed(`data/${process.env.NODE_ENV}-player-data.json`)
+    await applySchemas()
+    await seed(`data/${process.env.NODE_ENV}-player-data.json`, "players", "userId")
+    await seed(`data/${process.env.NODE_ENV}-item-data.json`, "items", "itemId")
     authToken = await getAuthKey()
 })
 
@@ -201,3 +204,100 @@ describe('/api/players/:userId', () => {
     });
 
 });
+
+describe("/api/items", () => {
+    test('GET 200   | Returns 200 and an object with the correct endpoint values in it', () => {
+        return request(app)
+            .get("/api/items")
+            .expect(200)
+            .then(({body}) => {
+                const items = body.items
+                items.forEach(item => {
+                    expect(item).toHaveProperty("itemId");
+                    expect(item).toHaveProperty("description");
+                    expect(item).toHaveProperty("cost");
+                    expect(item).toHaveProperty("isStackable");
+                })
+            })
+    });
+    test('PUT 200   | Returns 200 and an object with the correct endpoint values in it', () => {
+        return request(app)
+            .put("/api/items")
+            .set("Authorization", authToken)
+            .send({
+                itemId: "69420",
+                name: "TestItem", 
+                description: "Some test item",
+                cost: 100,
+            })
+            .expect(200)
+            .then(({body}) => {
+                const item = body.item
+                expect(item).toHaveProperty("itemId");
+                return request(app)
+                    .get("/api/items/69420")
+                    .expect(200)
+                    .then(({body}) => {
+                        const item = body.item
+                        expect(item).toHaveProperty("itemId");
+                        expect(item).toHaveProperty("name");
+                        expect(item).toHaveProperty("description");
+                        expect(item).toHaveProperty("cost");
+                        expect(item).toHaveProperty("isStackable");
+                    })
+            })
+    });
+})
+
+describe("/api/items/:itemId", () => {
+    test('GET 200   | Returns 200 and an object with the correct endpoint values on it', () => {
+        return request(app)
+            .get("/api/items/1")
+            .expect(200)
+            .then(({body}) => {
+                const item = body.item
+                expect(Object.keys(item).length > 0).toBe(true);
+                expect(item).toHaveProperty("itemId");
+                expect(item).toHaveProperty("name");
+                expect(item).toHaveProperty("description");
+                expect(item).toHaveProperty("cost");
+                expect(item).toHaveProperty("isStackable");
+            })
+    });
+    test('GET 200   | Returns 200 and an item object with the correct itemId', () => {
+        return request(app)
+            .get("/api/items/1")
+            .expect(200)
+            .then(({body}) => {
+                const item = body.item
+                expect(item).toHaveProperty("itemId");
+                expect(item.itemId).toBe("1")
+            })
+    });
+    test('GET 404   | Returns 404 when passed a valid but nonexistent itemId', () => {
+        return request(app)
+            .get("/api/items/4")
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("Item not found")
+            })
+    });
+    test('DELETE 204    | Returns 204 when successfully deleting a preexisting item ', () => {
+        return request(app)
+            .delete("/api/items/1")
+            .set("Authorization", authToken)
+            .expect(204)
+            .then(() => {
+                return request(app)
+                    .get("/api/items/1")
+                    .expect(404)
+            })
+    });
+    test('DELETE 404    | Returns 404 when deleting a item that doesnt exist', () => {
+        return request(app)
+            .delete("/api/items/4")
+            .set("Authorization", authToken)
+            .expect(404)
+    });
+})
