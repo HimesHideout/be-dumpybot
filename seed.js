@@ -1,14 +1,12 @@
 const {ddbDocClientFull} = require(`${__dirname}/database/connection`);
 const fs = require("fs");
 
-const seed = async (seedDataPath, seedDataTable, idField) => {
+const seed = async (seedDataPath, tableName, idField) => {
     
     const ENV = process.env.NODE_ENV
     const pathToCorrectFile = `${__dirname}/.env.${ENV}`;
     require("dotenv").config({ path: pathToCorrectFile });
-    
-    const tableName = `${process.env.DYNAMO_TABLE_PREFIX}-${seedDataTable}`
-    
+        
     const scanParams = {
         TableName: tableName,
         ProjectionExpression: idField
@@ -47,10 +45,10 @@ const seed = async (seedDataPath, seedDataTable, idField) => {
 }
 
 if (require.main === module) {
-    seed(`data/${process.env.NODE_ENV}-player-data.json`, "players", "userId").then(() => {
+    seed(`data/${process.env.NODE_ENV}-player-data.json`, process.env.DYNAMO_PLAYERS_TABLE, "userId").then(() => {
         console.log("Seeded Player Data!")
     })
-    seed(`data/${process.env.NODE_ENV}-item-data.json`, "items", "itemId").then(() => {
+    seed(`data/${process.env.NODE_ENV}-item-data.json`, process.env.DYNAMO_ITEMS_TABLE, "itemId").then(() => {
         console.log("Seeded Item Data!")
     })
 }

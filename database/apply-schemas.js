@@ -9,6 +9,10 @@ const pathToCorrectFile = `${__dirname}/../.env.${ENV}`;
 require("dotenv").config({ path: pathToCorrectFile });
 const DB = new DynamoDB({region: process.env.AWS_DEFAULT_REGION})
 const schemas = fs.readdirSync(`${__dirname}/schemas`).filter(file => file.endsWith('.json'));
+const tableNames = {
+    "players": process.env.DYNAMO_PLAYERS_TABLE,
+    "items": process.env.DYNAMO_ITEMS_TABLE
+}
 
 async function applySchemas() {
     const tables = (await DB.listTables({})).TableNames
@@ -16,7 +20,7 @@ async function applySchemas() {
     try {
         for (const schema of schemas) {
             const schemaData = require(`${__dirname}/schemas/${schema}`)
-            const schemaTableName = `${process.env.DYNAMO_TABLE_PREFIX}-${schemaData.TableName}`
+            const schemaTableName = tableNames[schemaData.TableName]
             schemaData.TableName = schemaTableName
             if (tables.includes(schemaTableName)) {
                 if (CLI_ARGS.includes("--force")) {

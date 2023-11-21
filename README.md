@@ -16,9 +16,14 @@ Here are a list of the available endpoints on the server:
 
 ### Creating Tables on AWS
 
-On your AWS account, you will need a few tables set up: `PRODUCTION`, `DEVELOPMENT` and `TEST` so that you can 
-separate your data. You most importantly need the split between `test` and `dev/prod` so that the testing suite
-may work.
+On your AWS account, you will need a few tables set up: One for the players, and another for the items. The names of this tables can be defined with the DYNAMO_{Table}_TABLE environment variable. So, for your dev environment you can do:
+
+DYNAMO_PLAYERS_TABLE = "dev-players"
+
+And that would be the table used for the players in that environment. As of right now the env variables to set are:
+
+DYNAMO_PLAYERS_TABLE
+DYNAMO_ITEMS_TABLE
 
 ### Installing Packages
 

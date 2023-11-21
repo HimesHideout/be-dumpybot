@@ -11,8 +11,8 @@ require("dotenv").config({path: pathToCorrectFile});
 let authToken = ''
 beforeAll(async () => {
     await applySchemas()
-    await seed(`data/${process.env.NODE_ENV}-player-data.json`, "players", "userId")
-    await seed(`data/${process.env.NODE_ENV}-item-data.json`, "items", "itemId")
+    await seed(`data/${process.env.NODE_ENV}-player-data.json`, process.env.DYNAMO_PLAYERS_TABLE, "userId")
+    await seed(`data/${process.env.NODE_ENV}-item-data.json`, process.env.DYNAMO_ITEMS_TABLE, "itemId")
     authToken = await getAuthKey()
 })
 

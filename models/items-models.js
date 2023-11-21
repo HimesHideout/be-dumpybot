@@ -4,7 +4,7 @@ const uuid = require("uuid")
 exports.selectItems = () => {
 
     const scanParams = {
-        TableName: `${process.env.DYNAMO_TABLE_PREFIX}-items`
+        TableName: process.env.DYNAMO_ITEMS_TABLE
     }
 
     return ddbDocClientFull
@@ -16,7 +16,7 @@ exports.selectItems = () => {
 
 exports.selectItemById = (itemId) => {
     const getParams = {
-        TableName: `${process.env.DYNAMO_TABLE_PREFIX}-items`,
+        TableName: process.env.DYNAMO_ITEMS_TABLE,
         Key: {
             itemId: itemId
         }
@@ -44,7 +44,7 @@ exports.insertItem = (item) => {
     }
 
     const putParams = {
-        TableName: `${process.env.DYNAMO_TABLE_PREFIX}-items`,
+        TableName: process.env.DYNAMO_ITEMS_TABLE,
         Item: {
             itemId: itemId,
             //Default parameters.
@@ -61,7 +61,7 @@ exports.insertItem = (item) => {
         .then((data) => {
             if (data.$metadata.httpStatusCode === 200) {
                 const getParams = {
-                    TableName: `${process.env.DYNAMO_TABLE_PREFIX}-items`,
+                    TableName: process.env.DYNAMO_ITEMS_TABLE,
                     Key: {
                         itemId: itemId
                     }
@@ -81,7 +81,7 @@ exports.updateItemById = (itemId, item) => {
 
 exports.removeItemById = (itemId) => {
     const deleteParams = {
-        TableName: `${process.env.DYNAMO_TABLE_PREFIX}-items`,
+        TableName: process.env.DYNAMO_ITEMS_TABLE,
         Key: {
             itemId: itemId
         }
