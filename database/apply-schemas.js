@@ -25,10 +25,31 @@ async function applySchemas() {
             if (tables.includes(schemaTableName)) {
                 if (CLI_ARGS.includes("--force")) {
                     console.log(`Table ${schemaTableName} already exists. Deleting...`)
-                    //TODO: Make the script wait until the table has actually been deleted before creating it again.
                     await DB.deleteTable({
                         TableName: schemaTableName
                     })
+                    //Check and wait for table to be deleted.
+                    let deleted = false
+                    while (!deleted) {
+                        try {
+                            const tableStatus = (await DB.describeTable({
+                                TableName: schemaTableName
+                            })).Table.TableStatus
+                            if (tableStatus === "DELETING") {
+                                console.log(`Waiting for table ${schemaTableName} to be deleted...`)
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+                            } else {
+                                deleted = true
+                            }
+                        } catch (error) {
+                            if (error.name === "ResourceNotFoundException") {
+                                deleted = true
+                            } else {
+                                throw error
+                            }
+                        }
+                    }
+                    console.log(`Table ${schemaTableName} deleted.`)
                 } else {
                     console.log(`Table ${schemaTableName} already exists. Skipping...`)
                     continue
