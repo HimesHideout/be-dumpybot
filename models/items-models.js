@@ -75,7 +75,7 @@ exports.insertItem = (item) => {
         })
 }
 
-exports.updateItemById = async (itemId, item) => {
+exports.updateItemById = (itemId, item) => {
     //TODO: Test this.
     const itemKeys = Object.keys(item)
 
@@ -100,7 +100,8 @@ exports.updateItemById = async (itemId, item) => {
                 ...accumulator,
                 [`:value${index}`]: item[key]
             })
-        , {})
+        , {}),
+        ReturnValues: "ALL_NEW"
     }
 
     return ddbDocClientFull.update(params)

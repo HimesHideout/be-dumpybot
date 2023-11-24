@@ -129,6 +129,26 @@
       "item": "1"
     }
   },
+  "PATCH /api/items/:itemId": {
+    "description": "edits the value of a specific item and returns the edited item",
+    "queries": [],
+    "bodyFormat": {
+      "name": "STRING|OPTIONAL",
+      "description": "STRING|OPTIONAL",
+      "cost": "INTEGER|OPTIONAL",
+      "isStackable": "BOOLEAN|OPTIONAL"
+    },
+    "exampleResponse": {
+      "item": {
+        "itemId": "9",
+        "name": "Vindictus Slime",
+        "description": "A yellow slime, found in emotes of the game Vindictus",
+        "cost": 19,
+        "isStackable": "true"
+      }
+    }
+  
+  },
   "DELETE /api/items/:itemId": {
     "description": "deletes a selected item",
     "queries": [],

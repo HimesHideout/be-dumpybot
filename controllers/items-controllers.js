@@ -1,4 +1,4 @@
-const { selectItems, selectItemById, insertItem, removeItemById } = require("../models/items-models");
+const { selectItems, selectItemById, insertItem, removeItemById, updateItemById } = require("../models/items-models");
 
 exports.getItems = (request, response, next) => {
     selectItems().then((items) => {
@@ -26,6 +26,17 @@ exports.insertItem = (request, response, next) => {
         response.status(200).send({item})
     }).catch((error) => {
         next(error)
+    })
+}
+
+//TODO: Make it return 404 when updating an item that doesn't exist.
+exports.updateItemById = (request, response, next) => {
+    const {itemId} = request.params
+    const item = request.body
+    updateItemById(itemId, item).then((item) => {
+        response.status(200).send({item})
+    }).catch((err) => {
+        next(err)
     })
 }
 

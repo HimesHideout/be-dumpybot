@@ -283,6 +283,39 @@ describe("/api/items/:itemId", () => {
                 expect(body.msg).toBe("Item not found")
             })
     });
+    test('PATCH 200 | Returns 200 and an object with the correct values on it', () => {
+        return request(app)
+            .patch("/api/items/1")
+            .set('Authorization', authToken)
+            .send({description: "new description", cost: 99})
+            .expect(200)
+            .then(({body}) => {
+                const item = body.item
+                expect(item.description).toBe("new description")
+                expect(item.cost).toBe(99)
+            })
+    });
+    test('PATCH 401 | Returns 401 when attempting an unauthenticated request', () => {
+        return request(app)
+            .patch("/api/items/1")
+            .send({description: "new description", cost: 99})
+            .expect(401)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("Unauthorized request")
+            })
+    });
+    /* test('PATCH 404 | Returns 404 when requesting a item that doesn\'t exist', () => {
+        return request(app)
+            .patch("/api/items/0")
+            .set('Authorization', authToken)
+            .send({description: "new description", cost: 99})
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("Item not found")
+            })
+    }); */
     test('DELETE 204    | Returns 204 when successfully deleting a preexisting item ', () => {
         return request(app)
             .delete("/api/items/1")
