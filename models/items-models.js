@@ -75,8 +75,38 @@ exports.insertItem = (item) => {
         })
 }
 
-exports.updateItemById = (itemId, item) => {
-    //TODO
+exports.updateItemById = async (itemId, item) => {
+    //TODO: Test this.
+    const itemKeys = Object.keys(item)
+
+    const params = {
+        TableName: process.env.DYNAMO_ITEMS_TABLE,
+        Key: {
+            itemId: itemId
+        },
+        UpdateExpression: `SET ${
+            itemKeys.map((_, index) => 
+                `#field${index} = :value${index}`
+            ).join(", ")
+        }`,
+        ExpressionAttributeNames: itemKeys.reduce(
+            (accumulator, key, index) => ({
+                ...accumulator,
+                [`#field${index}`]: key
+            })
+        , {}),
+        ExpressionAttributeValues: itemKeys.reduce(
+            (accumulator, key, index) => ({
+                ...accumulator,
+                [`:value${index}`]: item[key]
+            })
+        , {})
+    }
+
+    return ddbDocClientFull.update(params)
+        .then((data) => {
+            return data.Attributes
+        })
 }
 
 exports.removeItemById = (itemId) => {
