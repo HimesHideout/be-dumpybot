@@ -109,8 +109,7 @@ exports.updateItemById = (itemId, item) => {
         .then((data) => {
             return data.Attributes
         }).catch((error) => {
-            let errorCode = error.__type.split("#").pop()
-            if (errorCode === "ConditionalCheckFailedException") {
+            if (error.name === "ConditionalCheckFailedException") {
                 return Promise.reject({status: 404, msg: "Item not found"});
             } else {
                 return Promise.reject({status: 500, msg: "Error updating Item"});
