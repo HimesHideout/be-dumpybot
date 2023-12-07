@@ -89,6 +89,7 @@ exports.updateItemById = (itemId, item) => {
                 `#field${index} = :value${index}`
             ).join(", ")
         }`,
+        ConditionExpression: "attribute_exists(itemId)",
         ExpressionAttributeNames: itemKeys.reduce(
             (accumulator, key, index) => ({
                 ...accumulator,
@@ -107,6 +108,13 @@ exports.updateItemById = (itemId, item) => {
     return ddbDocClientFull.update(params)
         .then((data) => {
             return data.Attributes
+        }).catch((error) => {
+            let errorCode = error.__type.split("#").pop()
+            if (errorCode === "ConditionalCheckFailedException") {
+                return Promise.reject({status: 404, msg: "Item not found"});
+            } else {
+                return Promise.reject({status: 500, msg: "Error updating Item"});
+            }
         })
 }
 

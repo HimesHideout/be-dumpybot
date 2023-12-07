@@ -305,7 +305,7 @@ describe("/api/items/:itemId", () => {
                 expect(body.msg).toBe("Unauthorized request")
             })
     });
-    /* test('PATCH 404 | Returns 404 when requesting a item that doesn\'t exist', () => {
+    test('PATCH 404 | Returns 404 when requesting a item that doesn\'t exist', () => {
         return request(app)
             .patch("/api/items/0")
             .set('Authorization', authToken)
@@ -315,7 +315,7 @@ describe("/api/items/:itemId", () => {
                 expect(body).toHaveProperty("msg");
                 expect(body.msg).toBe("Item not found")
             })
-    }); */
+    });
     test('DELETE 204    | Returns 204 when successfully deleting a preexisting item ', () => {
         return request(app)
             .delete("/api/items/1")
