@@ -76,7 +76,6 @@ exports.insertItem = (item) => {
 }
 
 exports.updateItemById = (itemId, item) => {
-    //TODO: Test this.
     const itemKeys = Object.keys(item)
 
     const params = {
@@ -90,6 +89,8 @@ exports.updateItemById = (itemId, item) => {
             ).join(", ")
         }`,
         ConditionExpression: "attribute_exists(itemId)",
+        //This weird contraption lets us use dynamic properties
+        //when updating the item.
         ExpressionAttributeNames: itemKeys.reduce(
             (accumulator, key, index) => ({
                 ...accumulator,
