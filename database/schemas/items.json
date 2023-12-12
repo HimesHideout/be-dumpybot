@@ -1,14 +1,14 @@
 {
-    "TableName": "test",
+    "TableName": "items",
     "KeySchema": [
         {
-            "AttributeName": "id",
+            "AttributeName": "itemId",
             "KeyType": "HASH"
         }
     ],
     "AttributeDefinitions": [
         {
-            "AttributeName": "id",
+            "AttributeName": "itemId",
             "AttributeType": "S"
         }
     ],

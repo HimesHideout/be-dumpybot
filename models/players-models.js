@@ -3,7 +3,7 @@ const {ddbDocClientFull} = require("../database/connection");
 exports.selectPlayers = () => {
 
     const scanParams = {
-        TableName: process.env.DYNAMO_TABLE_NAME
+        TableName: process.env.DYNAMO_PLAYERS_TABLE
     }
 
     return ddbDocClientFull
@@ -15,7 +15,7 @@ exports.selectPlayers = () => {
 
 exports.selectPlayerById = (playerId) => {
     const getParams = {
-        TableName: process.env.DYNAMO_TABLE_NAME,
+        TableName: process.env.DYNAMO_PLAYERS_TABLE,
         Key: {
             userId: playerId
         }
@@ -36,7 +36,7 @@ exports.insertPlayer = (playerId) => {
         return Promise.reject({ status: 400, msg: "userId is required" });
     }
     const putParams = {
-        TableName: process.env.DYNAMO_TABLE_NAME,
+        TableName: process.env.DYNAMO_PLAYERS_TABLE,
         Item: {
             userId: playerId,
             balance: 0,
@@ -49,7 +49,7 @@ exports.insertPlayer = (playerId) => {
         .then((data) => {
             if (data.$metadata.httpStatusCode === 200) {
                 const getParams = {
-                    TableName: process.env.DYNAMO_TABLE_NAME,
+                    TableName: process.env.DYNAMO_PLAYERS_TABLE,
                     Key: {
                         userId: playerId
                     }
@@ -65,7 +65,7 @@ exports.insertPlayer = (playerId) => {
 
 exports.updatePlayerById = async (playerId, patch) => {
 
-    const data = await ddbDocClientFull.get({TableName: process.env.DYNAMO_TABLE_NAME, Key: {userId: playerId}})
+    const data = await ddbDocClientFull.get({TableName: process.env.DYNAMO_PLAYERS_TABLE, Key: {userId: playerId}})
     const player = data.Item
 
     if (patch.incr_balance && typeof patch.incr_balance !== "number") return Promise.reject({
@@ -81,7 +81,7 @@ exports.updatePlayerById = async (playerId, patch) => {
         })
 
         const params = {
-            TableName: process.env.DYNAMO_TABLE_NAME,
+            TableName: process.env.DYNAMO_PLAYERS_TABLE,
             Key: {
                 userId: playerId
             },
@@ -113,7 +113,7 @@ exports.removePlayerById = (playerId) => {
     //     return Promise.reject({ status: 400, msg: "userId is required" });
     // }
     const deleteParams = {
-        TableName: process.env.DYNAMO_TABLE_NAME,
+        TableName: process.env.DYNAMO_PLAYERS_TABLE,
         Key: {
             userId: playerId
         }

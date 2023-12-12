@@ -6,6 +6,7 @@ const helmet = require("helmet")
 const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
 const {getPlayers, getPlayerById, patchPlayerById, insertPlayer, deletePlayerById} = require("./controllers/players-controllers");
+const { getItems, getItemById, insertItem, updateItemById, deleteItemById } = require("./controllers/items-controllers");
 const fs = require("fs");
 
 const app = express();
@@ -35,9 +36,20 @@ app.put("/api/players", jwtCheck, insertPlayer)
 app.get("/api/players/:userId", getPlayerById)
 
 // noinspection JSCheckFunctionSignatures
-app.patch("/api/players/:userId", jwtCheck , patchPlayerById)
+app.patch("/api/players/:userId", jwtCheck, patchPlayerById)
 
 app.delete("/api/players/:userId", jwtCheck, deletePlayerById)
+
+app.get("/api/items", getItems)
+
+app.put("/api/items", jwtCheck, insertItem)
+
+app.get("/api/items/:itemId", getItemById)
+
+app.patch("/api/items/:itemId", jwtCheck, updateItemById)
+
+app.delete("/api/items/:itemId", jwtCheck, deleteItemById)
+
 
 // Error Handling
 app.use((req, res) => {

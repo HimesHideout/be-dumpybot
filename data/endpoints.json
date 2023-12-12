@@ -84,5 +84,75 @@
     "queries": [],
     "bodyFormat": {},
     "exampleResponse": {}
+  },
+  "GET /api/items": {
+    "description": "serves up all the items of the bot",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "items": [
+        {
+          "itemId": "1",
+          "name": "some item",
+          "description": "item description",
+          "cost": 69,
+          "isStackable": "true"
+        }
+      ]
+    }
+  },
+  "GET /api/items/:itemId": {
+    "description": "serves up a selected item",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "item": {
+        "itemId": "2",
+        "name": "yet another item",
+        "description": "item description #2",
+        "cost": 42,
+        "isStackable": "false"
+      }
+    }
+  },
+  "PUT /api/items": {
+    "description": "inserts an item into the database",
+    "queries": [],
+    "bodyFormat": {
+      "name": "STRING",
+      "description": "STRING",
+      "cost": "INTEGER",
+      "isStackable": "BOOLEAN"
+    },
+    "exampleResponse": {
+      "status": "success",
+      "item": "1"
+    }
+  },
+  "PATCH /api/items/:itemId": {
+    "description": "edits the value of a specific item and returns the edited item",
+    "queries": [],
+    "bodyFormat": {
+      "name": "STRING|OPTIONAL",
+      "description": "STRING|OPTIONAL",
+      "cost": "INTEGER|OPTIONAL",
+      "isStackable": "BOOLEAN|OPTIONAL"
+    },
+    "exampleResponse": {
+      "item": {
+        "itemId": "9",
+        "name": "Vindictus Slime",
+        "description": "A yellow slime, found in emotes of the game Vindictus",
+        "cost": 19,
+        "isStackable": "true"
+      }
+    }
+  
+  },
+  "DELETE /api/items/:itemId": {
+    "description": "deletes a selected item",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {}
   }
 }
