@@ -1,34 +1,39 @@
 const {ddbDocClientFull} = require("../database/connection");
+const {selectAll, selectById} = require("./base-models");
 
 exports.selectPlayers = () => {
 
-    const scanParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE
-    }
+    return selectAll(process.env.DYNAMO_PLAYERS_TABLE)
 
-    return ddbDocClientFull
-        .scan(scanParams)
-        .then((data) => {
-            return data.Items
-        })
+    // const scanParams = {
+    //     TableName: process.env.DYNAMO_PLAYERS_TABLE
+    // }
+    //
+    // return ddbDocClientFull
+    //     .scan(scanParams)
+    //     .then((data) => {
+    //         return data.Items
+    //     })
 }
 
-exports.selectPlayerById = (playerId) => {
-    const getParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE,
-        Key: {
-            userId: playerId
-        }
-    }
-    return ddbDocClientFull
-        .get(getParams)
-        .then((data) => {
-            if (data.Item === undefined) {
-                return Promise.reject({status: 404, msg: "Player not found"});
-            } else {
-                return data.Item
-            }
-        })
+exports.selectPlayerById = async (playerId) => {
+    // const getParams = {
+    //     TableName: process.env.DYNAMO_PLAYERS_TABLE,
+    //     Key: {
+    //         userId: playerId
+    //     }
+    // }
+    // return ddbDocClientFull
+    //     .get(getParams)
+    //     .then((data) => {
+    //         if (data.Item === undefined) {
+    //             return Promise.reject({status: 404, msg: "Player not found"});
+    //         } else {
+    //             return data.Item
+    //         }
+    //     })
+
+    return selectById(process.env.DYNAMO_PLAYERS_TABLE, "userId", playerId)
 }
 
 exports.insertPlayer = (playerId) => {
