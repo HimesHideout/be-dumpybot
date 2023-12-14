@@ -16,14 +16,22 @@ Here are a list of the available endpoints on the server:
 
 ### Creating Tables on AWS
 
-On your AWS account, you will need a few tables set up: One for the players, and another for the items. The names of this tables can be defined with the DYNAMO_{Table}_TABLE environment variable. So, for your dev environment you can do:
+On your AWS account, you will need a few tables set up: One for the players, and another for the items. The names of these tables can be defined with the `DYNAMO_{Table}_TABLE` environment variables (see **.env Files** below).
 
-DYNAMO_PLAYERS_TABLE = "dev-players"
+The four tables you should need to make are as follows:
 
-And that would be the table used for the players in that environment. As of right now the env variables to set are:
+- Players Table (Development)
+- Items Table (Development)
+- Players Table (Testing)
+- Items Table (Testing)
 
-DYNAMO_PLAYERS_TABLE
-DYNAMO_ITEMS_TABLE
+How you name these tables is up to you but make sure you reflect that naming in the `.env` files so that schemas are properly applied when running tests.
+
+We've added an automatic script for creating the tables in `database/apply-schemas.js`. You can run it as:
+
+`npm run apply-schemas`
+
+This script also runs during the tests to create the test tables.
 
 ### Installing Packages
 
@@ -49,8 +57,10 @@ contain the following keys:
 AWS_DEFAULT_REGION=yourRegion
 AWS_ACCESS_KEY_ID=yourId
 AWS_SECRET_ACCESS_KEY=yourSecret
-DYNAMO_TABLE_NAME=yourTableName
-#AUTH0
+DYNAMO_PLAYERS_TABLE=yourPlayerTable
+DYNAMO_ITEMS_TABLE=yourItemsTable
+
+# AUTH0
 AUTH_URL=https://dev-yourCode.us.auth0.com/oauth/token
 AUTH_AUDIENCE=http://your-audience.com
 AUTH_CLIENT_ID=yourAuthClient
@@ -63,14 +73,16 @@ Make sure your dynamo table name is correct as well!
 
 For example, your **test .env** might have 
 ```dotenv
-DYNAMO_TABLE_NAME=test_dumpy
+DYNAMO_PLAYERS_TABLE=test-players
+DYNAMO_ITEMS_TABLE=test-items
 ```
 and then your **development .env** may have:
 ```dotenv
-DYNAMO_TABLE_NAME=development_dumpy
+DYNAMO_PLAYERS_TABLE=dev-players
+DYNAMO_ITEMS_TABLE=dev-items
 ```
 
-How you name them is up to you, but double check you have the right information in each env file respectively.
+How you name them is up to you, but double-check you have the right information in each env file respectively.
 
 ### Adding`jwt-info.json`
 
