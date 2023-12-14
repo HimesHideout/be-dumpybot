@@ -24,7 +24,7 @@ exports.selectById = (table, key, value) => {
         .get(getParams)
         .then((data) => {
             if (data.Item === undefined) {
-                return Promise.reject({status: 404, msg: `${value} not found`});
+                return Promise.reject({status: 404, msg: `${key} not found`});
             } else {
                 return data.Item
             }
