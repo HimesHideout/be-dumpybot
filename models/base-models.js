@@ -20,6 +20,7 @@ exports.selectById = (table, key, value) => {
             [key]: value
         }
     }
+
     return ddbDocClientFull
         .get(getParams)
         .then((data) => {
@@ -28,5 +29,45 @@ exports.selectById = (table, key, value) => {
             } else {
                 return data.Item
             }
+        })
+}
+
+exports.insert = (table, itemParams, key, value) => {
+    const putParams = {
+        TableName: table,
+        Item: itemParams
+    }
+
+    return ddbDocClientFull
+        .put(putParams)
+        .then((data) => {
+            if (data.$metadata.httpStatusCode === 200) {
+                const getParams = {
+                    TableName: table,
+                    Key: {
+                        [key]: value
+                    }
+                }
+                return ddbDocClientFull
+                    .get(getParams)
+                    .then((data) => data.Item)
+            } else {
+                return Promise.reject({status: data.$metadata.httpStatusCode, msg: "Insertion error"});
+            }
+        })
+}
+
+exports.removeById = (table, key, value) => {
+    const deleteParams = {
+        TableName: table,
+        Key: {
+            [key]: value
+        }
+    }
+
+    return ddbDocClientFull
+        .delete(deleteParams)
+        .then((data) => {
+            return data
         })
 }
