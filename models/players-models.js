@@ -1,66 +1,31 @@
 const {ddbDocClientFull} = require("../database/connection");
+const {selectAll, selectById, removeById, insert} = require("./base-models");
 
 exports.selectPlayers = () => {
 
-    const scanParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE
-    }
+    return selectAll(process.env.DYNAMO_PLAYERS_TABLE)
 
-    return ddbDocClientFull
-        .scan(scanParams)
-        .then((data) => {
-            return data.Items
-        })
 }
 
-exports.selectPlayerById = (playerId) => {
-    const getParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE,
-        Key: {
-            userId: playerId
-        }
-    }
-    return ddbDocClientFull
-        .get(getParams)
-        .then((data) => {
-            if (data.Item === undefined) {
-                return Promise.reject({status: 404, msg: "Player not found"});
-            } else {
-                return data.Item
-            }
-        })
+exports.selectPlayerById = async (playerId) => {
+
+    return selectById(process.env.DYNAMO_PLAYERS_TABLE, "userId", playerId)
 }
 
 exports.insertPlayer = (playerId) => {
+
+    const itemParams = {
+        userId: playerId,
+        balance: 0,
+        inventory: {}
+    }
+
     if (playerId === undefined || playerId === ""){
         return Promise.reject({ status: 400, msg: "userId is required" });
     }
-    const putParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE,
-        Item: {
-            userId: playerId,
-            balance: 0,
-            inventory: {}
-        }
-    }
 
-    return ddbDocClientFull
-        .put(putParams)
-        .then((data) => {
-            if (data.$metadata.httpStatusCode === 200) {
-                const getParams = {
-                    TableName: process.env.DYNAMO_PLAYERS_TABLE,
-                    Key: {
-                        userId: playerId
-                    }
-                }
-                return ddbDocClientFull
-                    .get(getParams)
-                    .then((data) => data.Item)
-            } else {
-                return Promise.reject({status: data.$metadata.httpStatusCode, msg: "Error creating player."})
-            }
-        })
+    return insert(process.env.DYNAMO_PLAYERS_TABLE, itemParams, "userId", playerId)
+
 }
 
 exports.updatePlayerById = async (playerId, patch) => {
@@ -109,19 +74,7 @@ exports.updatePlayerById = async (playerId, patch) => {
 }
 
 exports.removePlayerById = (playerId) => {
-    // if (playerId === undefined || playerId === ""){
-    //     return Promise.reject({ status: 400, msg: "userId is required" });
-    // }
-    const deleteParams = {
-        TableName: process.env.DYNAMO_PLAYERS_TABLE,
-        Key: {
-            userId: playerId
-        }
-    }
 
-    return ddbDocClientFull
-        .delete(deleteParams)
-        .then((data) => {
-            return data
-        })
+    return removeById(process.env.DYNAMO_PLAYERS_TABLE, "userId", playerId)
+
 }

@@ -18,10 +18,9 @@ const getAuthKey = async () => {
     const authObj = await axios.post(options.url, options.body)
     const data = authObj.data
     const output = `${data.token_type} ${data.access_token}`
-    console.log(output)
     return output
 }
 
-getAuthKey().then(null)
+getAuthKey().then((output) => console.log(output))
 
 module.exports = getAuthKey

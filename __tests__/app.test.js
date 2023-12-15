@@ -131,7 +131,7 @@ describe('/api/players/:userId', () => {
             .expect(404)
             .then(({body}) => {
                 expect(body).toHaveProperty("msg");
-                expect(body.msg).toBe("Player not found")
+                expect(body.msg).toBe("userId not found")
             })
     });
     test('PATCH 200 | Returns 200 and an object with the correct values on it', () => {
@@ -180,7 +180,7 @@ describe('/api/players/:userId', () => {
             .expect(404)
             .then(({body}) => {
                 expect(body).toHaveProperty("msg");
-                expect(body.msg).toBe("Player not found")
+                expect(body.msg).toBe("userId not found")
             })
     });
 
@@ -280,7 +280,7 @@ describe("/api/items/:itemId", () => {
             .expect(404)
             .then(({body}) => {
                 expect(body).toHaveProperty("msg");
-                expect(body.msg).toBe("Item not found")
+                expect(body.msg).toBe("itemId not found")
             })
     });
     test('PATCH 200 | Returns 200 and an object with the correct values on it', () => {
