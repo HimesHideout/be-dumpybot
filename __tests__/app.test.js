@@ -205,6 +205,115 @@ describe('/api/players/:userId', () => {
 
 });
 
+describe('/api/players/:userId/inventory', () => {
+    test('GET 200   | Returns 200 and an object with the correct endpoint values on it', () => {
+        return request(app)
+            .get("/api/players/2/inventory")
+            .set('Authorization', authToken)
+            .expect(200)
+            .then(({body}) => {
+                const inventory = body.inventory
+                expect(inventory).toBeInstanceOf(Array)
+                inventory.forEach(item => {
+                    expect(item).toHaveProperty("itemId");
+                    expect(item).toHaveProperty("name");
+                    expect(item).toHaveProperty("description");
+                    expect(item).toHaveProperty("cost");
+                    expect(item).toHaveProperty("isStackable");
+                    expect(item).toHaveProperty("quantity");
+                    expect(item).toHaveProperty("type");
+                })
+            })
+    });
+    test('GET 404  | Returns 404 when passed a valid but nonexistent userId', () => {
+        return request(app)
+            .get("/api/players/4/inventory")
+            .set('Authorization', authToken)
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("userId not found")
+            })
+    });
+    test('PUT 200   | Returns 200 and an object with the correct endpoint values in it', () => {
+        return request(app)
+            .put("/api/players/3/inventory")
+            .set('Authorization', authToken)
+            .send({itemId: "1", quantity: 1})
+            .expect(200)
+            .then(({body}) => {
+                expect(body.status).toBe("success")
+                return request(app)
+                    .get("/api/players/3/inventory")
+                    .set('Authorization', authToken)
+                    .expect(200)
+                    .then(({body}) => {
+                        const inventory = body.inventory
+                        const item_in_inventory = inventory.some(item => item.itemId === "1")
+                        expect(item_in_inventory).toBe(true)
+                    })
+            })
+    });
+    test('PUT 404   | Returns 404 when passed a valid but nonexistent userId or itemId', () => {
+        return request(app)
+            .put("/api/players/4/inventory")
+            .set('Authorization', authToken)
+            .send({itemId: "69420", quantity: 1})
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("userId not found")
+                request(app)
+                    .put("/api/players/2/inventory")
+                    .set('Authorization', authToken)
+                    .send({itemId: "42069", quantity: 1})
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body).toHaveProperty("msg");
+                        expect(body.msg).toBe("itemId not found")
+                    })
+            })
+    });
+    test('DELETE 204 | Returns 204 and an object with the correct endpoint values in it', () => {
+        return request(app)
+            .delete("/api/players/2/inventory")
+            .set('Authorization', authToken)
+            .send({itemId: "8", quantity: 1})
+            .expect(204)
+            .then(() => {
+                return request(app)
+                    .get("/api/players/2/inventory")
+                    .set('Authorization', authToken)
+                    .expect(200)
+                    .then(({body}) => {
+                        const inventory = body.inventory
+                        const item_in_inventory = inventory.some(item => item.itemId === "1")
+                        expect(item_in_inventory).toBe(false)
+                    })
+            })
+    });
+    test('DELETE 404 | Returns 404 when passed a valid but nonexistent userId or itemId', () => {
+        return request(app)
+            .delete("/api/players/4/inventory")
+            .set('Authorization', authToken)
+            .send({itemId: "1", quantity: 1})
+            .expect(404)
+            .then(({body}) => {
+                expect(body).toHaveProperty("msg");
+                expect(body.msg).toBe("userId not found")
+                request(app)
+                    .delete("/api/players/2/inventory")
+                    .set('Authorization', authToken)
+                    .send({itemId: "42069", quantity: 1})
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body).toHaveProperty("msg");
+                        expect(body.msg).toBe("itemId not found")
+                    })
+            })
+    });
+})
+
 describe("/api/items", () => {
     test('GET 200   | Returns 200 and an object with the correct endpoint values in it', () => {
         return request(app)
