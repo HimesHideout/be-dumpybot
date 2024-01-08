@@ -176,7 +176,6 @@ exports.addItemtoPlayerInventory = async (playerId, itemId, quantity=1) => {
         })
 }
 
-//TODO: Allow removing multiple non-stackable items at once.
 exports.removeItemFromPlayerInventory = async (playerId, itemId, quantity=1) => {
     if (quantity < 1) {
         return Promise.reject({status: 400, msg: "quantity must be greater than 0"})
