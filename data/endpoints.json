@@ -85,6 +85,53 @@
     "bodyFormat": {},
     "exampleResponse": {}
   },
+  "GET /api/players/:userId/inventory": {
+    "description": "serves the inventory of the specified player",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "inventory": [
+        {
+          "itemId": "1",
+          "name": "some item",
+          "description": "item description",
+          "cost": 69,
+          "isStackable": "true",
+          "quantity": 1,
+          "type": "item"
+        },
+        {
+          "itemId": "2",
+          "name": "yet another item",
+          "and so on": "and so forth"
+        }
+      ]
+    }
+  },
+  "PUT /api/players/:userId/inventory": {
+    "description": "inserts an item into the inventory of the specified player",
+    "queries": [],
+    "bodyFormat": {
+      "itemId": "STRING",
+      "quantity": "INTEGER"
+    },
+    "exampleResponse": {
+      "status": "success",
+      "userId": "1",
+      "itemId": "1"
+    }
+  },
+  "DELETE /api/players/:userId/inventory": {
+    "description": "deletes an item (or takes n units) from the inventory of the specified player",
+    "queries": [],
+    "bodyFormat": {
+      "itemId": "STRING",
+      "quantity": "INTEGER"
+    },
+    "exampleResponse": {
+      "status": "success"
+    }
+  },
   "GET /api/items": {
     "description": "serves up all the items of the bot",
     "queries": [],

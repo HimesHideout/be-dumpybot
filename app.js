@@ -5,7 +5,7 @@ const helmet = require("helmet")
 
 const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
-const {getPlayers, getPlayerById, patchPlayerById, insertPlayer, deletePlayerById} = require("./controllers/players-controllers");
+const {getPlayers, getPlayerById, patchPlayerById, insertPlayer, deletePlayerById, getPlayerInventory, addItemtoPlayerInventory, removeItemFromPlayerInventory} = require("./controllers/players-controllers");
 const { getItems, getItemById, insertItem, updateItemById, deleteItemById } = require("./controllers/items-controllers");
 const fs = require("fs");
 
@@ -39,6 +39,12 @@ app.get("/api/players/:userId", getPlayerById)
 app.patch("/api/players/:userId", jwtCheck, patchPlayerById)
 
 app.delete("/api/players/:userId", jwtCheck, deletePlayerById)
+
+app.get("/api/players/:userId/inventory", jwtCheck, getPlayerInventory)
+
+app.put("/api/players/:userId/inventory", jwtCheck, addItemtoPlayerInventory)
+
+app.delete("/api/players/:userId/inventory", jwtCheck, removeItemFromPlayerInventory)
 
 app.get("/api/items", getItems)
 

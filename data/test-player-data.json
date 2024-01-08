@@ -2,16 +2,27 @@
   {
     "userId": "1",
     "balance": 0,
-    "inventory": {}
+    "inventory": []
   },
   {
     "userId": "2",
     "balance": 0,
-    "inventory": {}
+    "inventory": [
+      {
+        "itemId": "160",
+        "quantity": 1,
+        "type": "item"
+      },
+      {
+        "itemId": "8",
+        "quantity": 1,
+        "type": "item"
+      }
+    ]
   },
   {
     "userId": "3",
     "balance": 0,
-    "inventory": {}
+    "inventory": []
   }
 ]
