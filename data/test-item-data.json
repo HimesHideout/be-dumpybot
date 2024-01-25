@@ -11,13 +11,15 @@
         "name": "Yuzu",
         "description": "A cat. :3",
         "cost": 0,
-        "isStackable": false
+        "isStackable": false,
+        "isInShop": false
     },
     {
         "itemId": "160",
         "name": "160 Primogems",
         "description": "Gems used in a foreign land to summon heroes",
         "cost": 160,
-        "isStackable": true
+        "isStackable": true,
+        "isInShop": true
     }
 ]

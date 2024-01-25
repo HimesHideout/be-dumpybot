@@ -443,3 +443,17 @@ describe("/api/items/:itemId", () => {
             .expect(404)
     });
 })
+
+describe("/api/shop", () => {
+    test('GET 200   | Returns 200 and an object with the items currently in the shop', () => {
+        return request(app)
+            .get("/api/shop")
+            .expect(200)
+            .then(({body}) => {
+                const items = body.items
+                items.forEach(item => {
+                    expect(item.isInShop).toBe(true)
+                })
+            })
+    });
+})

@@ -32,6 +32,41 @@ exports.selectById = (table, key, value) => {
         })
 }
 
+exports.selectByAttribute = (table, attribute, value) => {
+    const scanParams = {
+        TableName: table,
+        FilterExpression: `${attribute} = :value`,
+        ExpressionAttributeValues: {
+            ":value": value
+        }
+    }
+
+    return ddbDocClientFull
+        .scan(scanParams)
+        .then((data) => {
+            return data.Items
+        })
+}
+
+exports.selectByAttributes = (table, attributes, values) => {
+    const scanParams = {
+        TableName: table,
+        FilterExpression: attributes.map((attribute, index) => `${attribute} = :value${index}`).join(" AND "),
+        ExpressionAttributeValues: values.reduce((accumulator, value, index) => {
+            return {
+                ...accumulator,
+                [`:value${index}`]: value
+            }
+        }, {})
+    }
+
+    return ddbDocClientFull
+        .scan(scanParams)
+        .then((data) => {
+            return data.Items
+        })
+}
+
 exports.insert = (table, itemParams, key, value) => {
     const putParams = {
         TableName: table,

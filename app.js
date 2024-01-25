@@ -7,6 +7,7 @@ const {handleErrors} = require("./error-handler");
 const {getEndpoints, getSecret} = require("./controllers/api-controllers");
 const {getPlayers, getPlayerById, patchPlayerById, insertPlayer, deletePlayerById, getPlayerInventory, addItemtoPlayerInventory, removeItemFromPlayerInventory} = require("./controllers/players-controllers");
 const { getItems, getItemById, insertItem, updateItemById, deleteItemById } = require("./controllers/items-controllers");
+const { getItemsInShop } = require("./controllers/shop-controllers");
 const fs = require("fs");
 
 const app = express();
@@ -55,6 +56,8 @@ app.get("/api/items/:itemId", getItemById)
 app.patch("/api/items/:itemId", jwtCheck, updateItemById)
 
 app.delete("/api/items/:itemId", jwtCheck, deleteItemById)
+
+app.get("/api/shop", getItemsInShop)
 
 
 // Error Handling

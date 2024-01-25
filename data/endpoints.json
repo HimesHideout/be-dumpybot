@@ -201,5 +201,22 @@
     "queries": [],
     "bodyFormat": {},
     "exampleResponse": {}
+  },
+  "GET /api/shop": {
+    "description": "serves up all the items in the shop",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "items": [
+        {
+          "itemId": "1",
+          "name": "some item",
+          "description": "item description",
+          "cost": 160,
+          "isStackable": "true",
+          "isInShop": true
+        }
+      ]
+    }
   }
 }
